@@ -45,7 +45,7 @@ TP 4 [TP detection suite ](TP_vision_detection_suite.md)
 
 TP5 [TP GAN et VAE](TP_vision_generation.md)
 
-TP 6 [TP LLM ]() A venir 
+TP 6 [TP LLM ](TP_LLM_intro.md)
 
 
 
