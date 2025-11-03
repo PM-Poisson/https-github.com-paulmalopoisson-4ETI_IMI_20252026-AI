@@ -37,13 +37,13 @@ TP 1 [TP Couleur ](TP_couleur.md)
 
 TP 2 [TP Intro detection ](TP_vision_detection.md)
 
-TP 3 [Intro RN et CNN ](TP_intro_CNN.md)
+TP 3.0 [Intro RN et CNN ](TP_intro_CNN.md)
 
-TP 3 [TP classification et CNN ](TP_classifcation.md)
+TP 3.1 [TP classification et CNN ](TP_classifcation.md)
 
 TP 4 [TP detection suite ](TP_vision_detection_suite.md)
 
-TP5 [TP GAN et VAE](TP_vision_generation.md)
+TP 5 [TP GAN et VAE](TP_vision_generation.md)
 
 TP 6 [TP LLM ](TP_LLM_intro.md)
 
