@@ -23,7 +23,7 @@ L'objectif principal est de tester les réseaux de neurones que je vous propose 
 3. **Analyse des couches :** Dans votre notebook, vous devrez expliquer en details  les différentes couches utilisées dans les modèles (couches denses, couches de convolution, etc.) et leur rôle dans le traitement des données. Citer vos references et vos  sources en particulier d'illustration de la convolution etc ... A la lecture de cette partie on doit comprendre le principe des differentes couches.
 
 > [!IMPORTANT]
-> La compréhension de cette partie  est l'interet principale de vos activités
+> La compréhension de cette partie  est l'interet principal de vos activités
 
 4. **Proposition d'améliorations :** Vous êtes invités à proposer des solutions pour obtenir le meilleur score possible. Si vous avez utilisé des ressources extérieures, veillez à les citer dans votre travail.
 
