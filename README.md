@@ -1,4 +1,4 @@
-# 5IRC_20252026-IAVISION
+# 4ETI_20252026-IAVISION (IMI-AI)
 
 
 ## Module VISION
@@ -7,19 +7,19 @@
 
 
 > [!IMPORTANT]
-> Le rendu se fera  en monome sous forme d'un git sous gitlab.
-
+> Le rendu se fera  en monome,binome,  sous forme d'un git sous github ou vous donnerez le droit maintener à fabricejumel
+> 
 > [!CAUTION]
-> Le rendu doit être finalisé pour le Mardi 17 novembre 2025 23H00 et sera tagué "V1" 
+> Le rendu doit être finalisé pour lelundi 4  décembre 2025 23H00 et sera tagué "V1" 
 
 
 Il est recommandé de travailler dans un environnement virtuel
 
 ``` bash
 # Creation initiale  du virtual env
-python -m venv venv_iavision2025
+python -m venv venv_iavision2026
 # Activation du virtual env, a refaire a chaque ouverture d'un terminal
-source venv_iavision2025/bin/activate
+source venv_iavision2026/bin/activate
 #installation des requirements (à faire une fois avec le virtual env activé)
 pip install -r requirements.txt
 ````
@@ -31,21 +31,16 @@ pip install -r requirements.txt
 
 Les actvités
 
-TP 0 [TP Intro ](TP_intro.md)
 
-TP 1 [TP Couleur ](TP_couleur.md)
 
-TP 2 [TP Intro detection ](TP_vision_detection.md)
+TP 1 [TP Intro detection ](TP_vision_detection.md)
 
-TP 3.0 [Intro RN et CNN ](TP_intro_CNN.md)
 
-TP 3.1 [TP classification et CNN ](TP_classifcation.md)
+TP 2 [TP classification et CNN ](TP_classifcation.md)
 
-TP 4 [TP detection suite ](TP_vision_detection_suite.md)
+TP 3 (bonus) [TP Vision Transformer ]()
 
-TP 5 [TP GAN et VAE](TP_vision_generation.md)
 
-TP 6 [TP LLM ](TP_LLM_intro.md)
 
 
 
