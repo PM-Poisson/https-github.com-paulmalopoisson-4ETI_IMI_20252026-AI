@@ -9,7 +9,7 @@
 > [!IMPORTANT]
 > Le rendu se fera  en monome,binome,trinome  sous forme d'un git sous github ou vous donnerez le droit maintener à fabricejumel. Des le premier jour, envoyé moi vos constititions de groupe par mail avec vos noms et comptes github.
 > 
-> 
+
 > [!CAUTION]
 > Le rendu doit être finalisé pour le lundi 4  mai 2026,  23H00 et sera tagué "V1" 
 
