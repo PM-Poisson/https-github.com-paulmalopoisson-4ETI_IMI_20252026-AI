@@ -32,13 +32,13 @@ pip install -r requirements.txt
 
 Les actvités
 
+Les TP A et B peuvent être fait en parrallele, le TP C necessite que le B soit compris
 
+TP A [TP Intro detection ](TP_vision_detection.md)
 
-TP 1 [TP Intro detection ](TP_vision_detection.md)
+TP B [TP classification et CNN ](TP_classifcation.md)
 
-TP 2 [TP classification et CNN ](TP_classifcation.md)
-
-TP 3 (bonus) [TP Vision Transformer ](https://github.com/fabricejumel/VIT_2025)
+TP C (bonus) [TP Vision Transformer ](https://github.com/fabricejumel/VIT_2025)
 
 
 
