@@ -7,7 +7,7 @@
 
 
 > [!IMPORTANT]
-> Le rendu se fera  en monome,binome,  sous forme d'un git sous github ou vous donnerez le droit maintener à fabricejumel
+> Le rendu se fera  en monome,binome,trinome  sous forme d'un git sous github ou vous donnerez le droit maintener à fabricejumel
 > 
 > [!CAUTION]
 > Le rendu doit être finalisé pour lelundi 4  décembre 2025 23H00 et sera tagué "V1" 
@@ -34,7 +34,6 @@ Les actvités
 
 
 TP 1 [TP Intro detection ](TP_vision_detection.md)
-
 
 TP 2 [TP classification et CNN ](TP_classifcation.md)
 
