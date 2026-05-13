@@ -9,7 +9,7 @@ with open("coco.names", "r") as f:
     classes = f.read().strip().split("\n")
 
 # Load an image for object detection
-image = cv2.imread("image.jpg")
+image = cv2.imread("kite.jpg")
 
 # Get the height and width of the image
 height, width = image.shape[:2]

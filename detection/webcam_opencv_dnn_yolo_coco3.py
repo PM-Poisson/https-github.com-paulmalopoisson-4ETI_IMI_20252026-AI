@@ -1,0 +1,218 @@
+#!/usr/bin/env python3
+
+"""webcam_opencv_dnn_yolo_coco.py: détection YOLO via OpenCV DNN,
+   sur webcam ou image statique, avec filtre optionnel de classes
+   et export des détections au format JSON."""
+
+__author__  = "Fabrice Jumel"
+__license__ = "CC0"
+__version__ = "0.3"
+
+# ── Imports ───────────────────────────────────────────────────────────────────
+import argparse                    # lecture des arguments en ligne de commande
+import sys                         # sys.exit() pour quitter proprement
+import json                        # export des détections au format JSON
+from datetime import datetime      # horodatage des détections
+
+import cv2
+import numpy as np
+
+# ── Seuils de détection ───────────────────────────────────────────────────────
+CONF_THRESHOLD = 0.5   # confiance minimale pour garder une détection
+NMS_THRESHOLD  = 0.4   # seuil NMS pour supprimer les boîtes redondantes
+
+
+# ── Parsing des arguments CLI ─────────────────────────────────────────────────
+def parse_args():
+    parser = argparse.ArgumentParser(description="Détection YOLO (webcam ou image)")
+
+    parser.add_argument(
+        "--source",
+        type=str,
+        default=None,
+        help="Index webcam (0, 1…) ou chemin vers une image. "
+             "Par défaut : webcam 0."
+    )
+    parser.add_argument(
+        "--classes",
+        nargs="+",
+        default=None,
+        help="Liste des classes à afficher, ex : --classes person car dog"
+    )
+    parser.add_argument(
+        "--output-json",
+        type=str,
+        default="detections.json",
+        help="Chemin du fichier JSON de sortie (défaut : detections.json)"
+    )
+
+    return parser.parse_args()
+
+
+# ── Ouverture de la source vidéo/image ────────────────────────────────────────
+def open_source(source):
+    """
+    Ouvre la source selon l'argument fourni.
+    - Retourne (cap, None)   pour une webcam (lecture continue).
+    - Retourne (None, frame) pour une image statique (lecture unique).
+    """
+    if source is None or source.isdigit():
+        cam_idx = 0 if source is None else int(source)
+        cap = cv2.VideoCapture(cam_idx)
+        cap.set(cv2.CAP_PROP_FRAME_WIDTH,  800)
+        cap.set(cv2.CAP_PROP_FRAME_HEIGHT, 600)
+        if not cap.isOpened():
+            sys.exit(f"[ERREUR] Impossible d'ouvrir la webcam {cam_idx}")
+        return cap, None
+
+    frame = cv2.imread(source)
+    if frame is None:
+        sys.exit(f"[ERREUR] Impossible de lire l'image : {source}")
+    return None, frame
+
+
+# ── Sauvegarde du JSON ────────────────────────────────────────────────────────
+def save_json(data, path):
+    """Écrit le dictionnaire `data` dans un fichier JSON indenté."""
+    with open(path, "w", encoding="utf-8") as f:
+        json.dump(data, f, indent=2, ensure_ascii=False)
+    print(f"[INFO] Détections sauvegardées dans : {path}")
+
+
+# ── Programme principal ───────────────────────────────────────────────────────
+def main():
+    args = parse_args()
+
+    # Chargement du réseau YOLO (poids + architecture)
+    net = cv2.dnn.readNet("yolov3-tiny.weights", "yolov3-tiny.cfg")
+
+    # Chargement des noms de classes COCO (80 classes)
+    with open("coco.names", "r") as f:
+        all_classes = f.read().strip().split("\n")
+
+    # Construction du filtre de classes à partir des arguments CLI
+    # ex : --classes person car  →  filter_ids = {0, 2}
+    filter_ids = None
+    if args.classes is not None:
+        filter_ids = {all_classes.index(c) for c in args.classes if c in all_classes}
+        unknown = [c for c in args.classes if c not in all_classes]
+        if unknown:
+            print(f"[ATTENTION] Classes inconnues ignorées : {unknown}")
+
+    # Ouverture de la source (webcam ou image)
+    cap, static_frame = open_source(args.source)
+
+    # ── Structure JSON racine ─────────────────────────────────────────────────
+    # Dictionnaire global sauvegardé en fin de programme.
+    # Contient : la source, la date, et la liste des frames avec détections.
+    json_output = {
+        "source": args.source if args.source is not None else "webcam",
+        "date":   datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
+        "frames": []
+    }
+    frame_index = 0   # compteur de frames (pertinent surtout en mode webcam)
+
+    # ── Boucle principale ─────────────────────────────────────────────────────
+    while True:
+
+        # Lecture de la frame selon la source
+        if cap is not None:
+            ret, frame = cap.read()
+            if not ret:
+                print("[INFO] Fin du flux webcam.")
+                break
+        else:
+            frame = static_frame
+
+        height, width = frame.shape[:2]
+
+        # Conversion en blob : normalisation + resize 416x416 + BGR→RGB
+        blob = cv2.dnn.blobFromImage(frame, 1/255.0, (416, 416),
+                                     swapRB=True, crop=False)
+        net.setInput(blob)
+
+        # Inférence sur les couches de sortie YOLO
+        outs = net.forward(net.getUnconnectedOutLayersNames())
+
+        class_ids, confidences, boxes = [], [], []
+
+        for out in outs:
+            for detection in out:
+                scores     = detection[5:]
+                class_id   = int(np.argmax(scores))
+                confidence = float(scores[class_id])
+
+                if confidence < CONF_THRESHOLD:
+                    continue
+                if filter_ids is not None and class_id not in filter_ids:
+                    continue
+
+                # Coordonnées relatives → pixels
+                cx = int(detection[0] * width)
+                cy = int(detection[1] * height)
+                w  = int(detection[2] * width)
+                h  = int(detection[3] * height)
+                x  = cx - w // 2
+                y  = cy - h // 2
+
+                class_ids.append(class_id)
+                confidences.append(confidence)
+                boxes.append([x, y, w, h])
+
+        # Non-Maximum Suppression : supprime les boîtes redondantes
+        indices = cv2.dnn.NMSBoxes(boxes, confidences,
+                                   CONF_THRESHOLD, NMS_THRESHOLD)
+
+        # ── Détections JSON pour cette frame ──────────────────────────────────
+        # Chaque détection contient : nom de classe, score de confiance,
+        # et les coordonnées de la bounding box (coin haut-gauche + taille).
+        frame_detections = []
+        for i in indices:
+            x, y, w, h = boxes[i]
+            label = all_classes[class_ids[i]]
+
+            # Dessin sur l'image affichée
+            cv2.rectangle(frame, (x, y), (x+w, y+h), (0, 255, 0), 2)
+            cv2.putText(frame, f"{label} {confidences[i]:.2f}",
+                        (x, y - 10), cv2.FONT_HERSHEY_SIMPLEX,
+                        0.5, (0, 255, 0), 2)
+
+            # Enregistrement dans la structure JSON
+            frame_detections.append({
+                "class":      label,
+                "confidence": round(confidences[i], 4),
+                "bbox": {
+                    "x": x, "y": y,   # coin supérieur gauche
+                    "w": w, "h": h    # largeur et hauteur en pixels
+                }
+            })
+
+        # Ajout de la frame au JSON global
+        json_output["frames"].append({
+            "frame_index": frame_index,
+            "detections":  frame_detections
+        })
+        frame_index += 1
+
+        cv2.imshow("Object Detection", frame)
+
+        # Condition de sortie
+        if cap is not None:
+            if cv2.waitKey(1) & 0xFF == ord("q"):
+                break
+        else:
+            cv2.waitKey(0)
+            break
+
+    # ── Sauvegarde finale du JSON ─────────────────────────────────────────────
+    # On écrit une seule fois à la fin (pas à chaque frame) pour les perfs.
+    # En mode webcam, le fichier est créé quand on quitte avec 'q'.
+    save_json(json_output, args.output_json)
+
+    if cap is not None:
+        cap.release()
+    cv2.destroyAllWindows()
+
+
+if __name__ == "__main__":
+    main()

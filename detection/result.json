@@ -1,0 +1,88 @@
+{
+  "source": "bus.jpg",
+  "type": "image",
+  "frame_size": {
+    "width": 810,
+    "height": 1080
+  },
+  "detections": [
+    {
+      "class_id": 5,
+      "class_name": "bus",
+      "confidence": 0.8734,
+      "bbox": {
+        "x1": 22.9,
+        "y1": 231.3,
+        "x2": 805.0,
+        "y2": 756.8,
+        "width": 782.1,
+        "height": 525.6
+      }
+    },
+    {
+      "class_id": 0,
+      "class_name": "person",
+      "confidence": 0.8657,
+      "bbox": {
+        "x1": 48.6,
+        "y1": 398.6,
+        "x2": 245.3,
+        "y2": 902.7,
+        "width": 196.8,
+        "height": 504.2
+      }
+    },
+    {
+      "class_id": 0,
+      "class_name": "person",
+      "confidence": 0.8528,
+      "bbox": {
+        "x1": 669.5,
+        "y1": 392.2,
+        "x2": 809.7,
+        "y2": 877.0,
+        "width": 140.2,
+        "height": 484.8
+      }
+    },
+    {
+      "class_id": 0,
+      "class_name": "person",
+      "confidence": 0.8252,
+      "bbox": {
+        "x1": 221.5,
+        "y1": 405.8,
+        "x2": 345.0,
+        "y2": 857.5,
+        "width": 123.5,
+        "height": 451.7
+      }
+    },
+    {
+      "class_id": 0,
+      "class_name": "person",
+      "confidence": 0.2611,
+      "bbox": {
+        "x1": 0.0,
+        "y1": 550.5,
+        "x2": 63.0,
+        "y2": 873.4,
+        "width": 63.0,
+        "height": 322.9
+      }
+    },
+    {
+      "class_id": 11,
+      "class_name": "stop sign",
+      "confidence": 0.2551,
+      "bbox": {
+        "x1": 0.1,
+        "y1": 254.5,
+        "x2": 32.6,
+        "y2": 324.9,
+        "width": 32.5,
+        "height": 70.4
+      }
+    }
+  ]
+}
